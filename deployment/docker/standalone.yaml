@@ -72,20 +72,29 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   # ------------------------------------------------------------------------------------------------------------
-  # Redpanda - Community Edition
+  # Redis database
   # ------------------------------------------------------------------------------------------------------------
-  console:
-    image: docker.redpanda.com/vectorized/console:master-173596f
+  redis:
+    image: redis:latest
+    hostname: redis
+    container_name: redis
     restart: on-failure
-    entrypoint: /bin/sh
-    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
-    environment:
-      CONFIG_FILEPATH: /tmp/config.yml
-      CONSOLE_CONFIG_FILE: |
-        kafka:
-          brokers: ["kafka:29092"]
     ports:
-      - "9103:8080"
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # ------------------------------------------------------------------------------------------------------------
+  # Redis UI
+  # ------------------------------------------------------------------------------------------------------------
+  redis-ui:
+    image: redislabs/redisinsight:latest
+    container_name: redis-ui
+    hostname: redis-ui
+    ports:
+      - '8001:8001'
+    volumes:
+      - 'redis-ui:/db'
 
   # ------------------------------------------------------------------------------------------------------------
   # Kafka UI
@@ -102,3 +111,7 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
       DYNAMIC_CONFIG_ENABLED: 'true'
+
+volumes:
+  redis_data: {}
+  redis-ui: {}
