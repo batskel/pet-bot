@@ -18,4 +18,5 @@ Useful command to stop and remove all containers
 ```bash
 docker stop $(docker ps -qa)
 docker rm $(docker ps -qa)
+docker volume rm $(docker volume ls -q)
 ```

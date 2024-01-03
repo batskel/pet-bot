@@ -11,6 +11,9 @@ services:
     restart: always
     ports:
       - ${PET_BOT_HOST_HTTP_PORT}:7072
+    depends_on:
+      - redis
+      - kafka
     environment:
       - SPRING_PROFILES_ACTIVE=default
 
@@ -43,7 +46,7 @@ services:
     platform: linux/arm64
     hostname: kafka
     container_name: kafka
-    restart: on-failure
+    restart: always
     ports:
       - "9092:9092"
     depends_on:
@@ -93,6 +96,8 @@ services:
     hostname: redis-ui
     ports:
       - '8001:8001'
+    depends_on:
+      - redis
     volumes:
       - 'redis-ui:/db'
 
