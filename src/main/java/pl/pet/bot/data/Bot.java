@@ -4,12 +4,17 @@ import java.io.Serializable;
 import lombok.Builder;
 
 /**
- * Represents a Bot.
+ * The Bot class represents a bot with its unique identifier, state, and location.
  *
- * @param botId bot id.
  * @param state bot state.
+ * @param botId bot id.
+ * @param location bot location.
  */
 @Builder
-public record Bot(String botId, BotState state) implements Serializable {
+public record Bot(
+    String botId,
+    BotState state,
+    BotLocation location
+) implements Serializable {
 }
 
